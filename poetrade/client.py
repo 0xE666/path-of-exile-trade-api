@@ -41,7 +41,14 @@ class TradeClient:
             self._cache = None
 
     async def __aenter__(self) -> TradeClient:
-        headers = {"User-Agent": self._user_agent}
+        # Origin + X-Requested-With are required by the trade site for the
+        # WebSocket live-search handshake and the Direct Whisper endpoint;
+        # search/fetch/exchange work without them but it's harmless to send.
+        headers = {
+            "User-Agent": self._user_agent,
+            "Origin": "https://www.pathofexile.com",
+            "X-Requested-With": "XMLHttpRequest",
+        }
         cookies = {}
         if self._poesessid:
             cookies["POESESSID"] = self._poesessid
@@ -116,9 +123,9 @@ class TradeClient:
     def exchange_url(self, result: ExchangeResponse) -> str:
         return _exchange_url(self.game, result.league, result.id)
 
-    async def whisper(self, listing_id: str) -> str:
+    async def whisper(self, whisper_token: str) -> str:
         return await whisper_ep.whisper(
-            self._s, self.game, listing_id, self._limiter
+            self._s, self.game, whisper_token, self._limiter
         )
 
     async def get_ignored(self) -> list[dict]:

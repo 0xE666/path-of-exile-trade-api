@@ -1,4 +1,5 @@
 from __future__ import annotations
+from urllib.parse import quote
 from aiohttp import ClientSession
 from ..exceptions import AuthenticationError, ServerError
 
@@ -19,7 +20,9 @@ async def get_ignored(session: ClientSession, game: str) -> list[dict]:
         raise ServerError(message=f"Ignore list error: {resp.status}", status_code=resp.status)
 
 async def ignore_account(session: ClientSession, game: str, account: str) -> None:
-    url = f"{BASE}/api/{_api_prefix(game)}/ignore/{account}"
+    # Account names include a "#1234" discriminator (and may contain spaces);
+    # the segment must be percent-encoded or the API 404s.
+    url = f"{BASE}/api/{_api_prefix(game)}/ignore/{quote(account, safe='')}"
     resp = await session.put(url)
     if resp.status in (401, 403):
         raise AuthenticationError(status_code=resp.status)
@@ -27,7 +30,7 @@ async def ignore_account(session: ClientSession, game: str, account: str) -> Non
         raise ServerError(message=f"Ignore error: {resp.status}", status_code=resp.status)
 
 async def unignore_account(session: ClientSession, game: str, account: str) -> None:
-    url = f"{BASE}/api/{_api_prefix(game)}/ignore/{account}"
+    url = f"{BASE}/api/{_api_prefix(game)}/ignore/{quote(account, safe='')}"
     resp = await session.delete(url)
     if resp.status in (401, 403):
         raise AuthenticationError(status_code=resp.status)

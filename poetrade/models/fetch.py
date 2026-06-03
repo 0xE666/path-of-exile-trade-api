@@ -19,7 +19,8 @@ class Listing(BaseModel):
     stash: dict | None = None
     price: Price | None = None
     account: AccountInfo
-    whisper: str | None = None
+    whisper: str | None = None        # ready-to-paste whisper message
+    whisper_token: str | None = None  # token for the Direct Whisper endpoint
 
 class SocketInfo(BaseModel):
     group: int

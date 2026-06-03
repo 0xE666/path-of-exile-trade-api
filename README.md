@@ -212,7 +212,7 @@ TradeClient(
 | `get_items()` | `list[ItemCategory]` | All item bases |
 | `get_static()` | `list[StaticCategory]` | Currency IDs |
 | `get_filters()` | `dict` | Filter definitions |
-| `whisper(listing_id)` | `str` | Generate whisper message |
+| `whisper(whisper_token)` | `str` | Direct Whisper a seller (pass `listing.whisper_token`; needs same league). For a copy-paste message use `listing.whisper`. |
 | `get_ignored()` | `list[dict]` | Ignored accounts |
 | `ignore_account(name)` | `None` | Ignore an account |
 | `unignore_account(name)` | `None` | Unignore |

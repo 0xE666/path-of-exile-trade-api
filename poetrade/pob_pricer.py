@@ -225,10 +225,16 @@ def extract_items(root: ET.Element) -> list[PoBItem]:
 
     # Assign slots and filter to equipped gear only
     equipped: list[PoBItem] = []
+    # Superset of PoE 1 and PoE 2 (PoB2) slot names. PoE 2 adds a third ring
+    # and charm slots; PoE 1 has up to five flasks. Slots absent from a given
+    # build's XML simply don't match, so a superset is safe for both games.
     gear_slots = [
         "Helmet", "Body Armour", "Gloves", "Boots",
-        "Weapon 1", "Weapon 2", "Ring 1", "Ring 2",
-        "Amulet", "Belt", "Flask 1", "Flask 2", "Flask 3", "Flask 4", "Flask 5",
+        "Weapon 1", "Weapon 2",
+        "Ring 1", "Ring 2", "Ring 3",          # PoE 2 has 3 rings
+        "Amulet", "Belt",
+        "Charm 1", "Charm 2", "Charm 3",       # PoE 2 charms
+        "Flask 1", "Flask 2", "Flask 3", "Flask 4", "Flask 5",
     ]
 
     for slot_name in gear_slots:
